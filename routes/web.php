@@ -24,5 +24,14 @@ Route::post('/',[AuthController::class,'login'])->name('auth.login');
 Route::get('/logout',[AuthController::class,'logout'])->name('auth.logout');
 
 Route::get('/home',function(){
-    return view('home');
+    if(Auth::check()){
+        $user= Auth::user();
+        if($user->role==1){
+            return view('home');
+        }else{
+            return view('enduser.enduser');
+        }
+
+    }
+
 })->name('home');

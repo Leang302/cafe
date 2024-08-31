@@ -10,7 +10,13 @@ class AuthController extends Controller
 {
     public function index(){
         if(Auth::check()){
-            return redirect()->route('home');
+            $user= Auth::user();
+            if($user->role==1){
+                return redirect()->route('home');
+            }else{
+                return view('enduser.enduser');
+            }
+
         }
         return view('auth.login');
 
@@ -21,7 +27,16 @@ class AuthController extends Controller
             'password'=>'required'
         ]);
         if(Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
-            return redirect()->route('home');
+            if(Auth::check()){
+                $user= Auth::user();
+                if($user->role==1){
+                    return redirect()->route('home');
+                }else{
+                    return view('enduser.enduser');
+                }
+
+            }
+            // return redirect()->route('home');
         }else{
             return redirect()->route('auth.login');
         }
